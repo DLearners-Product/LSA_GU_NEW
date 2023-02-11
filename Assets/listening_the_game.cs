@@ -11,14 +11,20 @@ public class listening_the_game : MonoBehaviour
 
     GameObject selectedGameObject;
     public AudioSource audioSource;
+    public AudioClip click;
 
     public int questionCount;
 
+    //particles
+    [SerializeField] private ParticleSystem prevParticle;
+    [SerializeField] private ParticleSystem nextParticle;
 
+    //text
+    [SerializeField] private TextMeshProUGUI counterText;
 
     private void Start()
     {
-        for(int i =0;i< Questions.Length; i++)
+        for (int i = 0; i < Questions.Length; i++)
         {
             Questions[i].SetActive(false);
         }
@@ -33,7 +39,10 @@ public class listening_the_game : MonoBehaviour
 
     public void NextScene()
     {
-        if(questionCount >= 2)
+        nextParticle.Play();
+        PlayAudio(click);
+
+        if (questionCount >= 2)
         {
             Debug.Log("Crash End");
             questionCount = 0;
@@ -47,9 +56,13 @@ public class listening_the_game : MonoBehaviour
             Questions[i].SetActive(false);
         }
         Questions[questionCount].SetActive(true);
+        UpdateCounter(questionCount);
     }
     public void PreviousScene()
     {
+        prevParticle.Play();
+        PlayAudio(click);
+
         if (questionCount <= 0)
         {
             Debug.Log("Crash start");
@@ -65,6 +78,7 @@ public class listening_the_game : MonoBehaviour
             Questions[i].SetActive(false);
         }
         Questions[questionCount].SetActive(true);
+        UpdateCounter(questionCount);
     }
     public void ChangeTextColor(string coloredText)
     {
@@ -74,5 +88,10 @@ public class listening_the_game : MonoBehaviour
         {
             selectedGameObject.GetComponent<TextMeshProUGUI>().SetText(coloredText);
         }
+    }
+
+    public void UpdateCounter(int count)
+    {
+        counterText.text = (count + 1) + " / 3";
     }
 }
